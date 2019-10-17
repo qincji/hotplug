@@ -1,10 +1,12 @@
 package com.example.hotplug;
 
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.View;
 
 import com.example.hotplug.retrofit.IMyService;
+import com.example.hotplug.retrofit.RetrofitTest;
 import com.example.hotplug.util.LogUtils;
 
 import java.io.IOException;
@@ -31,30 +33,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        rxjava();
-//        okhttp();
-        retrofit();
+        findViewById(R.id.btn_ok).setOnClickListener(v -> {
+            //        rxjava();
+            //        okhttp();
+            retrofit();
+        });
     }
 
     private void retrofit() {
-        Retrofit retrofit=new Retrofit.Builder()
-                .baseUrl("http://www.baidu.com")
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://www.baidu.com/")
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         IMyService iMyService = retrofit.create(IMyService.class);
 
-        retrofit2.Call call = iMyService.getService("lisi");
+//        RetrofitTest test = new RetrofitTest();
+//        IMyService iMyService = test.create(IMyService.class);
 
-        call.enqueue(new retrofit2.Callback() {
+        retrofit2.Call<Object> call = iMyService.getService("http://www.baidu.com/");
+
+        call.enqueue(new retrofit2.Callback<Object>() {
             @Override
-            public void onResponse(retrofit2.Call call, retrofit2.Response response) {
+            public void onResponse(retrofit2.Call<Object> call, retrofit2.Response<Object> response) {
 
             }
 
             @Override
-            public void onFailure(retrofit2.Call call, Throwable t) {
+            public void onFailure(retrofit2.Call<Object> call, Throwable t) {
 
             }
         });
